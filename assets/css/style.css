@@ -1,0 +1,16 @@
+body {
+    background-image: url("../images/background.jpeg");
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+h1 {
+    text-align: center;
+    color: white;
+    font-weight: 900;
+}
+#triviaGameplay {
+    background-color: #fff;
+    text-align: center;
+    
+}

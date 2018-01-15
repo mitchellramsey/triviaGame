@@ -138,6 +138,76 @@ var questionBank = [
         correctAnswer: "Curlin",
         correctImage:  "assets/images/q20.jpg",
         fastFact: "Curlin last raced in 2008. He won over 10.5 million dollars."
+    },
+    question21 = {
+        question: "Which of these games used to be played with a live animal serving as the ball?",
+        answerChoices: ["Soccer", "Golf", "Polo", "Coquet"],
+        correctAnswer: "Polo",
+        correctImage: "assets/images/q21.jpg",
+        fastFact: "Riders had to carry a goat across the goal line."
+    },
+    question22 = {
+        question: "What is the maximum number of clubs that a golfer can carry in a tournament (Putter does not count)?",
+        answerChoices: ["9", "6", "12", "14"],
+        correctAnswer: "14",
+        correctImage: "assets/images/q22.jpg",
+        fastFact: "A golfer may not change clubs during a round. However, there is an exception if a club is broken."
+    },
+    question23 = {
+        question: "What team did soccer great Pele join in 1975?",
+        answerChoices: ["Cosmos", "Knights", "Strikers", "Rooks"],
+        correctAnswer: "Cosmos",
+        correctImage: "assets/images/q23.jpg",
+        fastFact: "Pele came out of retirement to play for the New York Cosmos."
+    },
+    question24 = {
+        question: "When was 'Sports Illustrated' first published?",
+        answerChoices: ["1954", "1983", "1965", "1971"],
+        correctAnswer: "1954",
+        correctImage: "assets/images/q24.jpg",
+        fastFact: "Sports Illustrated is read by more than 23 million people every week."
+    },
+    question25 = {
+        question: "In 2004, how many times was Barry Bonds walked?",
+        answerChoices: ["328", "401", "157", "232"],
+        correctAnswer: "232",
+        correctImage: "assets/images/q25.jpg",
+        fastFact: "This broke the record for the most walks in a single season."
+    },
+    question26 = {
+        question: "Which famous athlete was born Ferdinand Lewis Alcindor Jr.?",
+        answerChoices: ["Leon Sphinx", "Tiger Woods", "Mohammed Ali", "Kareem Abdul-Jabbar"],
+        correctAnswer: "Kareem Abdul-Jabbar",
+        correctImage: "assets/images/q26.jpg",
+        fastFact: "Kareem played 20 seasons in the NBA."
+    },
+    question27 = {
+        question: "Which of the following cups might you win in yacht racing?",
+        answerChoices: ["Stanley", "America", "Norris", "Silver"],
+        correctAnswer: "America",
+        correctImage: "assets/images/q27.jpg",
+        fastFact: "America's Cup - This cup is also known as the Auld Cup."
+    },
+    question28 = {
+        question: "After the United States, which country claims the most professional baseball players in the MLB?",
+        answerChoices: ["Cuba", "Dominican Republic", "Peru", "Russia"],
+        correctAnswer: "Dominican Republic",
+        correctImage: "assets/images/q28.png",
+        fastFact: "Dominican Republic is second followed by Venezula."
+    },
+    question29 = {
+        question: "What position did football great Franco Harris play?",
+        answerChoices: ["Tight End", "Quarterback", "Cornerback", "Fullback"],
+        correctAnswer: "Fullback",
+        correctImage: "assets/images/q29.jpg",
+        fastFact: "Fullback - Harris was selected for 9 consecutive Pro Bowls."
+    },
+    question30 = {
+        question: "Who lost the World Series in 2015?",
+        answerChoices: ["Kansas City Royals", "Toronto Blue Jays", "Baltimore Orioles", "New York Mets"],
+        correctAnswer: "New York Mets",
+        correctImage: "assets/images/q30.png",
+        fastFact: "The Royals wond the World Series in 2015."
     }
     
 
@@ -186,7 +256,7 @@ function decrement () {
         var displayImage = $("<img>");
         displayImage.attr("src", questionBank[randomQuestion].correctImage);
         displayImage.attr("width", "200px");
-        $("triviaGameplay").append(displayImage);
+        $("#triviaGameplay").append(displayImage);
         incorrect +=1;
         $("#numberIncorrect").html(incorrect);
         questionBank.splice(randomQuestion,1);
@@ -221,6 +291,8 @@ function showQuestion() {
                     clearInterval(intervalId);
                     $("#triviaGameplay").html("<p>That is the correct answer!</p>");
                     questionInfoReveal();
+                    var correctAudio = new Audio("assets/audio/correct.mp3");
+                    correctAudio.play();
                     correct += 1;
                     $("#numberCorrect").html(correct);
                     questionBank.splice(randomQuestion,1);
@@ -229,6 +301,8 @@ function showQuestion() {
                     clearInterval(intervalId);
                     $("#triviaGameplay").html("<p>That is the incorrect answer!</p>");
                     questionInfoReveal();
+                    var incorrectAudio = new Audio("assets/audio/incorrect.mp3");
+                    incorrectAudio.play();
                     incorrect += 1;
                     $("#numberIncorrect").html(incorrect);
                     questionBank.splice(randomQuestion,1);
@@ -240,6 +314,8 @@ function showQuestion() {
         
         });
     } else {
+        var gameoverAudio = new Audio("assets/audio/gameover.mp3");
+        gameoverAudio.play();
         $("#triviaGameplay").html("<p>Thank you for playing Sports Trivia!</p>");
         $("#triviaGameplay").append("<p>You answered "+correct+" questions correctly and "+ incorrect +" questions incorrectly!")
 
@@ -249,9 +325,14 @@ function showQuestion() {
 }
 
 function startGame () {
-
-    $("#triviaGameplay").html("<button type='button' class='btn btn-lg startGame'>Start Game</button>");
-    $("#triviaGameplay").append("<p>Welcome to Sports Trivia! Click the Start Button to begin the game!</p>");
+    var introMusic = new Audio("assets/audio/startup.mp3");
+    introMusic.play();
+    //$("#triviaGameplay").html("<button type='button' class='btn btn-lg startGame'>Start Game</button>");
+    var startButton = $("<button>");
+    startButton.attr("type","button");
+    startButton.addClass("btn btn-lg startGame");
+    startButton.text("Start Game");
+    $("#triviaGameplay").append(startButton);
     $(".startGame").click(function() {
         showQuestion();
     });

@@ -9,8 +9,15 @@ h1 {
     color: white;
     font-weight: 900;
 }
-#triviaGameplay {
+#triviaGameplay, p {
     background-color: #fff;
     text-align: center;
+    padding: 10px;
+    font-size: 20px;
     
+}
+
+.questionText {
+    display: block;
+    margin: 10px auto;
 }

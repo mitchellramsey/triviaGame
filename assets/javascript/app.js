@@ -1,3 +1,4 @@
+//The ridiculously long question bank, but its worth making the game replayable.
 var questionBank = [
     question1 = {
         question: "Which of the following NFL teams did Tom Brady quarterback to a Super Bowl win?",
@@ -221,7 +222,7 @@ var timer;
 var intervalId;
 
 
-
+//Shuffles up the answer choices, therefore repeat players do not memorize just the location.
 function shuffle(answers) {
     var i = 0;
     var j = 0;
@@ -236,27 +237,25 @@ function shuffle(answers) {
 
 }
 
-
+//function used to display the fast fact and images after an answer choice button is clicked
 function questionInfoReveal () {
     $("#triviaGameplay").append("<p>" + questionBank[randomQuestion].fastFact + "</p>");
     var displayImage = $("<img>");
     displayImage.attr("src", questionBank[randomQuestion].correctImage);
-    console.log(questionBank[randomQuestion].correctImage);
     displayImage.attr("width", "200px");
     $("#triviaGameplay").append(displayImage);
 }
 
+//countdown timer and the actions if the timer hits zero
 function decrement () {
     timer--;
     $("#remainingTime").html(timer);
     if(timer === 0){
         clearInterval(intervalId);
         $("#triviaGameplay").html("<p>You have run out of time!</p>");
-        $("#triviaGameplay").append("<p>" + questionBank[randomQuestion].fastFact + "</p>");
-        var displayImage = $("<img>");
-        displayImage.attr("src", questionBank[randomQuestion].correctImage);
-        displayImage.attr("width", "200px");
-        $("#triviaGameplay").append(displayImage);
+        questionInfoReveal();
+        var incorrectAudio = new Audio("assets/audio/incorrect.mp3");
+        incorrectAudio.play();
         incorrect +=1;
         $("#numberIncorrect").html(incorrect);
         questionBank.splice(randomQuestion,1);
@@ -265,15 +264,20 @@ function decrement () {
 }
 
 
-
+//main gameplay function
 function showQuestion() {
-    if(questionNumber<10){
+    //initial statement to keep looping as long as player hasnt missed 3 questions and there are still questions to ask
+    if(incorrect<3 && questionBank.length > 0){
         intervalId = setInterval(decrement, 1000);
         timer = 30;
         questionNumber+=1;
         $("#questionNumber").html(questionNumber);
+
+        //Chooses Random question
         randomQuestion = Math.floor(Math.random() * questionBank.length);
         $("#triviaGameplay").html("<p class='questionText'>" + questionBank[randomQuestion].question + "</p>");
+
+        //Shuffle answer choices, assign correct answer value, display and conditions for click right and wrong answers
         shuffle(questionBank[randomQuestion].answerChoices);
         questionBank[randomQuestion].answerChoices.forEach(function(choice) {
             var answerButton = $("<button>");
@@ -313,17 +317,23 @@ function showQuestion() {
             
         
         });
-    } else {
+    //Condition for if player misses 3 questions    
+    } else if(incorrect === 3) {
         var gameoverAudio = new Audio("assets/audio/gameover.mp3");
         gameoverAudio.play();
-        $("#triviaGameplay").html("<p>Thank you for playing Sports Trivia!</p>");
+        $("#triviaGameplay").html("<p>Unfortunately, you lost Sports Trivia. Better luck next time!</p>");
         $("#triviaGameplay").append("<p>You answered "+correct+" questions correctly and "+ incorrect +" questions incorrectly!")
-
+    //Condition for if player successfully answers all questions    
+    } else if(questionBank.length === 0){
+        var gameoverAudio = new Audio("assets/audio/gameover.mp3");
+        gameoverAudio.play();
+        $("#triviaGameplay").html("<p>Congratulations! You won Sports Trivia!</p>");
+        $("#triviaGameplay").append("<p>You answered "+correct+" questions correctly and "+ incorrect +" questions incorrectly!")
     }
   
 
 }
-
+//Sets the start-up Screen
 function startGame () {
     var introMusic = new Audio("assets/audio/startup.mp3");
     introMusic.play();
@@ -334,7 +344,9 @@ function startGame () {
     startButton.text("Start Game");
     $("#triviaGameplay").append(startButton);
     $(".startGame").click(function() {
+        introMusic.pause();
         showQuestion();
+
     });
 
 }
